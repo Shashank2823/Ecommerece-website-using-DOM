@@ -1,0 +1,165 @@
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Navigation bar styles */
+.navbar {
+  background-color: #d2cfcf; /* Dark background color */
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between; /* Distribute items along the main axis */
+  align-items: center; /* Center items vertically */
+  padding: 10px 20px; /* Add padding for better spacing */
+}
+
+#welcomeMessage {
+  margin: 0; /* Remove default margin */
+  color: #984909; /* Text color */
+}
+
+.nav-links {
+  margin-left: auto; /* Push the navigation links to the right */
+}
+
+.navbar a {
+  color: #e22f35; /* Light text color */
+  font-size: large;
+  text-decoration: none;
+  padding: 10px 15px; /* Add padding for better spacing */
+}
+
+.navbar a:hover {
+  background-color: #f1ac53; /* Light background color on hover */
+  color: rgb(240, 235, 235); /* Dark text color on hover */
+}
+
+
+/* Body styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+/* Container for cards */
+#itemsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center align the cards */
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+/* Style for each card */
+.item-box {
+  width: 200px; /* Fixed width for each card */
+  height: 250px; /* Fixed height for each card */
+  margin: 30px; /* Margin between cards */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-sizing: border-box; /* Ensure padding doesn't affect the width */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Title style */
+.item-box h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+/* Price style */
+.item-box p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+/* Delete button style */
+.item-box button {
+  background-color: #ff6347;
+  color: #fff;
+  border: none;
+  padding: 8px 12px; /* Adjusted padding */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 14px; /* Adjusted font size */
+}
+
+.item-box button:hover {
+  background-color: #ff4737;
+}
+
+/* Center align the header */
+.head1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Gradient border for the header */
+.head1 {
+  border-bottom: 4px solid;
+  font-size: 30px;
+  background: linear-gradient(to right, #5e1902,rgb(97, 97, 222),rgb(9, 185, 47), #6f0546);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  padding-bottom: 10px;
+}
+
+/* Input field styles */
+.abc {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center align items vertically */
+  margin-bottom: 20px; /* Add margin between input fields and button */
+}
+
+.field {
+  width: calc(33.33% - 5px); /* Cover 33.33% width with margin */
+  padding: 8px;
+  margin-right: 5px; /* Add spacing between input fields */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px; /* Smaller font size */
+}
+
+/* Button styles */
+#addItemBtn {
+  background-color: #4CAF50; /* Green */
+  color: white;
+  padding: 8px 16px; /* Adjusted padding */
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px; /* Adjusted font size */
+}
+
+#addItemBtn:hover {
+  background-color: #45a049;
+}
+#logoutBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #ff6347; /* Red */
+  color: white;
+  padding: 8px 16px;
+}
+
+#logoutButton {
+  background-color: #c4290e; /* Red color for logout button */
+  color: white; /* Text color */
+  border: none;
+  padding: 10px 15px; /* Add padding for better spacing */
+  cursor: pointer;
+  border-radius: 15px; /* Add border radius for rounded corners */
+}
+
+#logoutButton:hover {
+  background-color: #ff4737; /* Darker red color on hover */
+}

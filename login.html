@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="log.css">
+</head>
+<body>
+    <form id="loginForm">
+        <select id="userType">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+        </select><br>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <a href="signup.html">Not Registered ?</a>
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var userType = document.getElementById('userType').value;
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            
+
+            var users = JSON.parse(localStorage.getItem('users')) || [];
+
+            var authenticatedUser = users.find(function(user) {
+                return user.userType === userType && user.username === username && user.password === password;
+            });
+
+
+            if (authenticatedUser) {
+                localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('userType', userType);
+                localStorage.setItem('username', username);
+
+                if (userType === 'user') {
+                    window.location.href = 'user.html'; 
+                } else if (userType === 'admin') {
+                    window.location.href = 'admin.html'; 
+                }
+            } else {
+                alert('Invalid username or password. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .item-image {
+            max-width: 100px;
+            max-height: 100px;
+        }
+        .price-cell {
+            position: relative;
+        }
+
+        .remove-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 5px;
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .remove-button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cart</h1>
+    <div id="cartItemsContainer"></div>
+    <h2><a href="user.html">Click to continue shopping</a>&#8592;</h2>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartItemsContainer = document.getElementById('cartItemsContainer');
+            const username = localStorage.getItem('username');
+            const userLoggedIn = localStorage.getItem('loggedIn') === 'true';
+            const isUser = localStorage.getItem('userType') === 'user';
+
+            if (!userLoggedIn || !isUser) {
+                window.location.href = 'login.html'; 
+            }
+
+            const userCart = JSON.parse(localStorage.getItem('userCart')) || [];
+            const filteredCartItems = userCart.filter(item => item.username === username);
+
+            if (filteredCartItems.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+            } else {
+                const table = document.createElement('table');
+                const headerRow = table.insertRow();
+                ['Sr No.', 'Name', 'Image', 'Quantity', 'Price'].forEach(function(headerText) {
+                    const th = document.createElement('th');
+                    th.textContent = headerText;
+                    headerRow.appendChild(th);
+                });
+
+                filteredCartItems.forEach(function(item, index) {
+                    const row = table.insertRow();
+                    const srNoCell = row.insertCell();
+                    srNoCell.textContent = index + 1;
+
+                    const nameCell = row.insertCell();
+                    nameCell.textContent = item.name;
+
+                    const imageCell = row.insertCell();
+                    const image = document.createElement('img');
+                    image.src = item.image; 
+                    //image.alt = item.name;
+                    image.classList.add('item-image');
+                    imageCell.appendChild(image);
+
+                    const quantityCell = row.insertCell();
+                    
+
+                    const addQuantityButton = document.createElement('button');
+                    addQuantityButton.textContent = '+';
+                    addQuantityButton.classList.add('quantity-btn', 'add');
+                    addQuantityButton.addEventListener('click', function() {
+                    item.quantity++;
+                    quantitySpan.textContent = item.quantity;
+                    priceSpan.textContent = `Rs.`+item.price*item.quantity;
+                    localStorage.setItem('userCart', JSON.stringify(userCart));
+                });
+                    const subQuantityButton = document.createElement('button');
+                    subQuantityButton.textContent = '-';
+                    subQuantityButton.classList.add('quantity-btn', 'sub');
+                    subQuantityButton.addEventListener('click', function() {
+                        if(item.quantity>1){
+                            item.quantity--;
+                            quantitySpan.textContent = item.quantity;
+                            priceSpan.textContent = `Rs.`+item.price*item.quantity;
+                            localStorage.setItem('userCart', JSON.stringify(userCart));
+                        }
+                });
+                    const quantitySpan = document.createElement('span');
+                    quantitySpan.textContent = item.quantity;
+                    quantityCell.appendChild(quantitySpan);
+                    quantityCell.appendChild(subQuantityButton);
+                    quantityCell.appendChild(addQuantityButton);
+
+                    
+                    
+                    const priceCell = row.insertCell();
+                    
+                    priceCell.classList.add('price-cell');
+                    
+                    const removeButton = document.createElement('button');
+                    removeButton.textContent = 'Remove';
+                    removeButton.classList.add('remove-button');
+                    removeButton.addEventListener('click', function() {
+                    const itemIndex = userCart.findIndex(item => item.name === filteredCartItems[index].name && item.price === filteredCartItems[index].price && item.username ===filteredCartItems[index].username);
+    
+                    if (itemIndex !== -1) {
+                    userCart.splice(itemIndex, 1);
+                    localStorage.setItem('userCart', JSON.stringify(userCart));
+                    table.deleteRow(row.rowIndex);
+                    }
+                });
+                const priceSpan= document.createElement('span');
+                priceSpan.textContent = `Rs.`+item.price*item.quantity;
+                priceCell.appendChild(priceSpan);
+                priceCell.appendChild(removeButton);
+            });
+
+                cartItemsContainer.appendChild(table);
+            }
+        });
+    </script>
+</body>
+</html>

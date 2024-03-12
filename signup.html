@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="log.css">
+</head>
+<body>
+    <form id="signupForm">
+        <select id="userType">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+        </select><br>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="text" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <a href="login.html">Already Registered</a>
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            var userType = document.getElementById('userType').value;
+            var username = document.getElementById('username').value;
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            var user = {
+                userType: userType,
+                username: username,
+                email: email,
+                password: password
+            };
+
+            var users = JSON.parse(localStorage.getItem('users')) || [];
+
+            users.push(user);
+
+            localStorage.setItem('users', JSON.stringify(users));
+             window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

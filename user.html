@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .item-box {
+            display: none; /* Initially hide item boxes */
+        }
+        .show-more-button {
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar">  
+        <h1 id="welcomeMessage" class="iden">Welcome ! Aao shopping kare...</h1>
+        <div class="nav-links">
+            <a class="active" href="#">Home</a>
+            <a href="cart.html" id="cart">Cart</a>
+            <button id="logoutButton">Sign In</button>
+        </div>
+    </div>
+    <div class="container">
+        <div id="itemsContainer"></div>
+        <button class="show-more-button" id="showMoreButton">Show More</button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const itemsContainer = document.getElementById('itemsContainer');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            const username = localStorage.getItem('username');
+
+            const isUserLoggedIn = localStorage.getItem('loggedIn') === 'true';
+            const isUser = localStorage.getItem('userType') === 'user';
+
+            const cart = document.getElementById('cart');
+            const showMoreButton = document.getElementById('showMoreButton');
+
+            if (isUserLoggedIn) {
+                welcomeMessage.innerHTML = `Welcome ${username}`;
+            } else {
+                cart.style.display = 'none';
+            }
+
+            const storedItems = JSON.parse(localStorage.getItem('items')) || [];
+            storedItems.forEach(function(item, index) {
+                const itemBox = createItemBox(item.name, item.price, isUserLoggedIn);
+                itemsContainer.appendChild(itemBox);
+            });
+
+            // Show More
+            let visibleItemCount = 0;
+            const itemBoxes = document.querySelectorAll('.item-box');
+            showNextItems(); // Initially show the first set of items
+            
+            function showNextItems() {
+                for (let i = visibleItemCount; i < visibleItemCount + 5; i++) {
+                    if (itemBoxes[i]) {
+                        itemBoxes[i].style.display = 'flex';
+                    }
+                }
+                visibleItemCount += 5;
+                if (visibleItemCount >= itemBoxes.length) {
+                    showMoreButton.style.display = 'none'; // Hide the button if all items are visible
+                }
+            }
+
+            showMoreButton.addEventListener('click', showNextItems);
+
+            // Logout
+            if (isUserLoggedIn) {
+                const logoutButton = document.getElementById('logoutButton');
+                logoutButton.innerText = 'Log Out'
+                logoutButton.addEventListener('click', function() {
+                    localStorage.removeItem('loggedIn');
+                    localStorage.removeItem('userType');
+                    window.location.href = 'login.html';
+                });
+            } else {
+                const logoutButton = document.getElementById('logoutButton');
+                logoutButton.addEventListener('click', function() {
+                    window.location.href = 'login.html';
+                });
+            }
+        });
+
+        function createItemBox(name, price, isUserLoggedIn) {
+            const itemBox = document.createElement('div');
+            itemBox.classList.add('item-box');
+            itemBox.innerHTML = `${name}<br> ${price}</br>`;
+            
+            const addToCartButton = document.createElement('button');
+            addToCartButton.textContent = 'Add to Cart';
+            addToCartButton.classList.add('cart-button');
+        
+            addToCartButton.addEventListener('click', function() {
+                if (isUserLoggedIn) {
+                    addToCart(name, price);
+                } else {
+                    alert('Please log in');
+                }
+            });
+        
+            itemBox.appendChild(addToCartButton);
+            
+            return itemBox;
+        }
+
+        function addToCart(name, price) {
+            const userCart = JSON.parse(localStorage.getItem('userCart')) || [];
+            const username = localStorage.getItem('username');
+            let itemExists = false;
+
+            userCart.forEach(function(item) {
+                if (item.username === username && item.name === name) {
+                    itemExists = true;
+                }
+            });
+
+            if (itemExists) {
+                alert('Item already exists!');
+            } else {
+                userCart.push({ username: username, name: name, price: price, quantity: 1 });
+                localStorage.setItem('userCart', JSON.stringify(userCart));
+                alert('Item added to cart!');
+            }
+        }
+    </script>
+</body>
+</html>

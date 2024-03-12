@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Site</title>
+  <link rel="stylesheet" href="admin.css">
+  
+</head>
+<body>
+  <button id="logoutBtn">Logout</button>
+  <h1>Welcome - Admin</h1>
+  <h1 class="head1">Shopping Site</h1>
+  <div class="abc">
+  <input type="text" class="field" id="itemName" placeholder="Name">
+  <input type="text" class="field" id="itemPrice" placeholder="Price">
+  <input type="text" class="field" id="itemPic" placeholder="Image">
+
+  <button id="addItemBtn">Add Item</button>
+</div>
+  
+  <div id="itemsContainer"></div>
+  
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const itemNameInput = document.getElementById('itemName');
+      const itemPriceInput = document.getElementById('itemPrice');
+      const addItemBtn = document.getElementById('addItemBtn');
+      const itemsContainer = document.getElementById('itemsContainer');
+
+      const isAdminLoggedIn = localStorage.getItem('loggedIn') === 'true';
+      const isAdmin = localStorage.getItem('userType') === 'admin';
+
+      if (!isAdminLoggedIn || !isAdmin) {
+        window.location.href = 'login.html'; 
+      }
+  
+      logoutBtn.addEventListener('click', function() {
+        localStorage.setItem('loggedIn', 'false');
+        window.location.href = 'login.html'; 
+      });
+
+      
+      addItemBtn.addEventListener('click', function() {
+        const itemName = itemNameInput.value;
+        const itemPrice = itemPriceInput.value;
+  
+        if (itemName.trim() !== '' && itemPrice.trim() !== '') {
+         
+          const itemBox = createItemBox(itemName, itemPrice);
+          itemsContainer.appendChild(itemBox);
+  
+          // Store in local storage
+          const items = JSON.parse(localStorage.getItem('items')) || [];
+          items.push({ name: itemName, price: itemPrice });
+          localStorage.setItem('items', JSON.stringify(items));
+  
+          itemNameInput.value = '';
+          itemPriceInput.value = '';
+        } else {
+          alert('Please enter both name and price of the item.');
+        }
+      });
+  
+      // Display local storage
+      const storedItems = JSON.parse(localStorage.getItem('items')) || [];
+      storedItems.forEach(function(item) {
+        
+        const itemBox = createItemBox(item.name, item.price);
+        itemsContainer.appendChild(itemBox);
+      });
+
+      function createItemBox(itemName, itemPrice) {
+        const itemBox = document.createElement('div');
+        itemBox.classList.add('item-box');
+        itemBox.innerHTML = `${itemName}<br> Rs${itemPrice}<br>`;
+  
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+
+        deleteBtn.addEventListener('click', function() {
+          
+          let items = JSON.parse(localStorage.getItem('items')) || [];
+          items = items.filter(item => !(item.name === itemName && item.price === itemPrice));
+          localStorage.setItem('items', JSON.stringify(items));
+  
+          
+          itemBox.remove();
+        });
+        
+        itemBox.appendChild(deleteBtn);
+  
+        return itemBox;
+      }
+  
+      
+    });
+  </script>
+  
+</body>
+</html>
